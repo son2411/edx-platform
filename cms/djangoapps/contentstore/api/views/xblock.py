@@ -19,7 +19,7 @@ from common.djangoapps.util.json_request import JsonResponse, expect_json_in_cla
 
 from .utils import course_author_access_required, get_bool_param
 
-from cms.djangoapps.contentstore.views.block import usage_key_with_run, modify_xblock, handle_xblock
+from cms.djangoapps.contentstore.xblock_services.xblock_service import usage_key_with_run, modify_xblock, handle_xblock
 
 log = logging.getLogger(__name__)
 
