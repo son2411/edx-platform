@@ -41,7 +41,7 @@ __all__ = [
     'orphan_handler', 'xblock_handler', 'xblock_view_handler', 'xblock_outline_handler', 'xblock_container_handler'
 ]
 
-log = logging.getLogger(__name__)
+# log = logging.getLogger(__name__)
 
 CREATE_IF_NOT_FOUND = ['course_info']
 

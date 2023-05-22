@@ -49,7 +49,7 @@ from xmodule.x_module import STUDENT_VIEW, STUDIO_VIEW
 
 from cms.djangoapps.contentstore.tests.utils import CourseTestCase
 from cms.djangoapps.contentstore.utils import reverse_course_url, reverse_usage_url
-from cms.djangoapps.contentstore.views import block as item_module
+from cms.djangoapps.contentstore.xblock_services import xblock_service as item_module
 from common.djangoapps.student.tests.factories import StaffFactory, UserFactory
 from common.djangoapps.xblock_django.models import (
     XBlockConfiguration,
@@ -64,7 +64,7 @@ from ..component import component_handler, get_component_templates
 from cms.djangoapps.contentstore.xblock_services.xblock_service import (
     ALWAYS,
     VisibilityState,
-    _get_block_info,
+    get_block_info,
     _get_source_index,
     _xblock_type_and_display_name,
     add_container_page_publishing_info,
@@ -452,7 +452,7 @@ class GetItemTest(ItemTest):
                     xblock = parent_xblock
             else:
                 self.assertNotIn('ancestors', response)
-                self.assertEqual(_get_block_info(xblock), response)
+                self.assertEqual(get_block_info(xblock), response)
 
 
 @ddt.ddt
@@ -1250,7 +1250,7 @@ class TestMoveItem(ItemTest):
         validation = html.validate()
         self.assertEqual(len(validation.messages), 0)
 
-    @patch('cms.djangoapps.contentstore.views.block.log')
+    @patch('cms.djangoapps.contentstore.xblock_services.xblock_service.log')
     def test_move_logging(self, mock_logger):
         """
         Test logging when an item is successfully moved.
