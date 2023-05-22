@@ -16,6 +16,6 @@ urlpatterns = [
             course_validation.CourseValidationView.as_view(), name='course_validation'),
     re_path(fr'^v1/quality/{settings.COURSE_ID_PATTERN}/$',
             course_quality.CourseQualityView.as_view(), name='course_quality'),
-    re_path(fr'^v1/xblock/{settings.COURSE_ID_PATTERN}/({settings.USAGE_KEY_PATTERN}/){helper}$',
+    re_path(fr'^v1/xblock/{settings.COURSE_ID_PATTERN}/{settings.USAGE_KEY_PATTERN}?$',
             xblock.XblockView.as_view(), name='xblock'),
 ]
