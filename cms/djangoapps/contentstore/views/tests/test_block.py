@@ -61,7 +61,7 @@ from lms.djangoapps.lms_xblock.mixin import NONSENSICAL_ACCESS_RESTRICTION
 from openedx.core.djangoapps.discussions.models import DiscussionsConfiguration
 
 from ..component import component_handler, get_component_templates
-from ..block import (
+from cms.djangoapps.contentstore.xblock_services.xblock_service import (
     ALWAYS,
     VisibilityState,
     _get_block_info,
@@ -90,6 +90,7 @@ class AsideTest(XBlockAside):
 
 class ItemTest(CourseTestCase):
     """ Base test class for create, save, and delete """
+
     def setUp(self):
         super().setUp()
 
@@ -546,6 +547,7 @@ class DuplicateHelper:
     """
     Helper mixin class for TestDuplicateItem and TestDuplicateItemWithAsides
     """
+
     def _duplicate_and_verify(self, source_usage_key, parent_usage_key, check_asides=False):
         """ Duplicates the source, parenting to supplied parent. Then does equality check. """
         usage_key = self._duplicate_item(parent_usage_key, source_usage_key)
@@ -1909,6 +1911,7 @@ class TestEditItemSplitMongo(TestEditItemSetup):
     """
     Tests for EditItem running on top of the SplitMongoModuleStore.
     """
+
     def test_editing_view_wrappers(self):
         """
         Verify that the editing view only generates a single wrapper, no matter how many times it's loaded
@@ -2579,6 +2582,7 @@ class TestXBlockInfo(ItemTest):
     """
     Unit tests for XBlock's outline handling.
     """
+
     def setUp(self):
         super().setUp()
         user_id = self.user.id
