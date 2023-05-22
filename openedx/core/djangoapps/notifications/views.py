@@ -18,7 +18,7 @@ from .models import Notification
 from .serializers import (
     NotificationCourseEnrollmentSerializer,
     NotificationSerializer,
-    UserNotificationPreferenceSerializer
+    UserNotificationPreferenceSerializer, UserNotificationPreferenceUpdateSerializer
 )
 
 User = get_user_model()
@@ -70,12 +70,23 @@ class UserNotificationPreferenceView(APIView):
         'course_id': 'course-v1:testorg+testcourse+testrun',
         'notification_preference_config': {
             'discussion': {
-                'new_post': {
+                'enabled': False,
+                'core': {
+                    'info': '',
                     'web': False,
                     'push': False,
                     'email': False,
-                }
-            }
+                },
+                'notification_types': {
+                    'new_post': {
+                        'info': '',
+                        'web': False,
+                        'push': False,
+                        'email': False,
+                    },
+                },
+                'not_editable': {},
+            },
         }
     }
     """
@@ -96,12 +107,23 @@ class UserNotificationPreferenceView(APIView):
                 'course_id': 'course-v1:testorg+testcourse+testrun',
                 'notification_preference_config': {
                     'discussion': {
-                        'new_post': {
+                        'enabled': False,
+                        'core': {
+                            'info': '',
                             'web': False,
                             'push': False,
                             'email': False,
-                        }
-                    }
+                        },
+                        'notification_types': {
+                            'new_post': {
+                                'info': '',
+                                'web': False,
+                                'push': False,
+                                'email': False,
+                            },
+                        },
+                        'not_editable': {},
+                    },
                 }
             }
          """
@@ -134,11 +156,13 @@ class UserNotificationPreferenceView(APIView):
             course_id=course_id,
             is_active=True,
         )
-        serializer = UserNotificationPreferenceSerializer(user_notification_preference, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        preference_update_serializer = UserNotificationPreferenceUpdateSerializer(
+            user_notification_preference, data=request.data, partial=True
+        )
+        preference_update_serializer.is_valid(raise_exception=True)
+        updated_notification_preferences = preference_update_serializer.save()
+        serializer = UserNotificationPreferenceSerializer(updated_notification_preferences)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class NotificationListAPIView(generics.ListAPIView):
