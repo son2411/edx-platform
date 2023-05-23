@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from edx_toggles.toggles import WaffleFlag
 from openedx.core.djangoapps.waffle_utils import CourseWaffleFlag
+from openedx_filters.learning.course.filters import CourseHomeUrlCreationStarted
 
 
 # Namespace for course experience waffle flags.
@@ -104,5 +105,15 @@ def course_home_url(course_key):
     Arguments:
         course_key (CourseKey): The course key for which the home url is being requested.
     """
+    try:
+        # .. filter_implemented_name: CourseHomeUrlCreationStarted
+        # .. filter_type: org.openedx.learning.course.homepage.url.creation.started.v1
+        course_key, course_home_url = CourseHomeUrlCreationStarted.run_filter(
+            course_key=course_key, course_home_url=None
+        )
+        return course_home_url
+    except CourseHomeUrlCreationStarted.PreventCourseHomeUrlRewrite as exc:
+        continue
+
     from .url_helpers import get_learning_mfe_home_url
     return get_learning_mfe_home_url(course_key, url_fragment='home')
